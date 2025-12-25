@@ -77,3 +77,33 @@ export interface PlaylistItemsParams {
   playlistId: string;
   maxResults?: number;
 }
+
+/**
+ * Comment parameters for fetching video comments
+ */
+export interface CommentParams {
+  videoId: string;
+  maxResults?: number;
+  order?: 'relevance' | 'time';
+  pageToken?: string;
+}
+
+/**
+ * Structured comment response
+ */
+export interface CommentResponse {
+  videoId: string;
+  comments: Array<{
+    commentId: string;
+    author: string;
+    authorChannelId: string;
+    authorProfileImage: string;
+    text: string;
+    publishedAt: string;
+    updatedAt: string;
+    likeCount: number;
+    replyCount: number;
+  }>;
+  nextPageToken?: string;
+  totalResults?: number;
+}

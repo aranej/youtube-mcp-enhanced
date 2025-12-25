@@ -1,5 +1,5 @@
 import { google } from 'googleapis';
-import { VideoParams, SearchParams, TrendingParams, RelatedVideosParams } from '../types.js';
+import { VideoParams, SearchParams, TrendingParams, RelatedVideosParams, CommentParams, CommentResponse } from '../types.js';
 
 /**
  * Service for interacting with YouTube videos
@@ -171,6 +171,68 @@ export class VideoService {
       return this.createStructuredVideos(videos);
     } catch (error) {
       throw new Error(`Failed to get related videos: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * Get comments for a YouTube video
+   */
+  async getVideoComments({
+    videoId,
+    maxResults = 20,
+    order = 'relevance',
+    pageToken
+  }: CommentParams): Promise<CommentResponse> {
+    try {
+      this.initialize();
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const params: any = {
+        part: ['snippet', 'replies'],
+        videoId,
+        maxResults: Math.min(maxResults, 100), // YouTube max is 100
+        order,
+      };
+
+      if (pageToken) {
+        params.pageToken = pageToken;
+      }
+
+      const response = await this.youtube.commentThreads.list(params);
+
+      const comments = (response.data.items || []).map((item: any) => {
+        const snippet = item.snippet?.topLevelComment?.snippet;
+        return {
+          commentId: item.id,
+          author: snippet?.authorDisplayName || 'Unknown',
+          authorChannelId: snippet?.authorChannelId?.value || '',
+          authorProfileImage: snippet?.authorProfileImageUrl || '',
+          text: snippet?.textDisplay || '',
+          publishedAt: snippet?.publishedAt || '',
+          updatedAt: snippet?.updatedAt || '',
+          likeCount: snippet?.likeCount || 0,
+          replyCount: item.snippet?.totalReplyCount || 0,
+        };
+      });
+
+      return {
+        videoId,
+        comments,
+        nextPageToken: response.data.nextPageToken || undefined,
+        totalResults: response.data.pageInfo?.totalResults || undefined,
+      };
+    } catch (error: any) {
+      // Handle specific YouTube API errors
+      if (error.code === 403) {
+        if (error.message?.includes('commentsDisabled')) {
+          throw new Error(`Comments are disabled for video ${videoId}`);
+        }
+        throw new Error(`Access denied: ${error.message}. Make sure YouTube Data API v3 is enabled.`);
+      }
+      if (error.code === 404) {
+        throw new Error(`Video ${videoId} not found`);
+      }
+      throw new Error(`Failed to get comments: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 }

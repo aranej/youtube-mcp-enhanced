@@ -52,6 +52,7 @@ export function createYouTubeMcpServer() {
                     tools: [
                         "videos_getVideo",
                         "videos_searchVideos",
+                        "videos_getComments",
                         "transcripts_getTranscript",
                         "channels_getChannel",
                         "channels_listVideos",
@@ -170,6 +171,46 @@ export function createYouTubeMcpServer() {
                     text: JSON.stringify(result, null, 2)
                 }]
             };
+        }
+    );
+
+    server.registerTool(
+        'videos_getComments',
+        {
+            title: 'Get Video Comments',
+            description: 'Get comments from a YouTube video with pagination support',
+            annotations: { readOnlyHint: true, idempotentHint: true },
+            inputSchema: {
+                videoId: z.string().describe('The YouTube video ID'),
+                maxResults: z.number().optional().describe('Number of comments to return (max 100, default 20)'),
+                order: z.enum(['relevance', 'time']).optional().describe('Sort order: relevance (default) or time'),
+                pageToken: z.string().optional().describe('Page token for pagination'),
+            },
+        },
+        async ({ videoId, maxResults, order, pageToken }) => {
+            try {
+                const result = await videoService.getVideoComments({ 
+                    videoId, 
+                    maxResults, 
+                    order: order as 'relevance' | 'time' | undefined, 
+                    pageToken 
+                });
+                return {
+                    content: [{
+                        type: 'text',
+                        text: JSON.stringify(result, null, 2)
+                    }]
+                };
+            } catch (error) {
+                return {
+                    content: [{
+                        type: 'text',
+                        text: JSON.stringify({
+                            error: error instanceof Error ? error.message : String(error)
+                        }, null, 2)
+                    }]
+                };
+            }
         }
     );
 
