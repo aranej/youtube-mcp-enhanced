@@ -26,10 +26,10 @@
     "publish-npm": "npm publish --access public"
   },
   "dependencies": {
+    "@danielxceron/youtube-transcript": "^1.0.1",
     "@modelcontextprotocol/sdk": "^1.1.1",
     "@smithery/sdk": "^1.7.4",
     "googleapis": "^129.0.0",
-    "youtube-transcript": "^1.0.6",
     "ytdl-core": "^4.11.5",
     "zod": "^3.25.46",
     "zod-to-json-schema": "^3.22.5"

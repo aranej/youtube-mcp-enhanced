@@ -1,6 +1,6 @@
 // @ts-ignore - We know the SDK exists
 import { MCPFunction, MCPFunctionGroup } from "@modelcontextprotocol/sdk";
-import { YoutubeTranscript } from "youtube-transcript";
+import { YoutubeTranscript } from "@danielxceron/youtube-transcript";
 
 export class TranscriptManagement implements MCPFunctionGroup {
   constructor() {

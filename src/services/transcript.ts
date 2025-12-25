@@ -1,4 +1,4 @@
-import { YoutubeTranscript } from "youtube-transcript";
+import { YoutubeTranscript } from "@danielxceron/youtube-transcript";
 import { TranscriptParams, SearchTranscriptParams } from '../types.js';
 
 /**
