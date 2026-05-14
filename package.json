@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Enhanced YouTube MCP Server with URL support - based on sfiorini/youtube-mcp",
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "main": "dist/index.js",
   "module": "./src/index.ts",
   "bin": {
