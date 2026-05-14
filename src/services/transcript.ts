@@ -1,5 +1,5 @@
-import { YoutubeTranscript } from "@danielxceron/youtube-transcript";
 import { TranscriptParams, SearchTranscriptParams } from '../types.js';
+import { fetchYouTubeTranscript } from './transcript-fetcher.js';
 
 /**
  * Service for interacting with YouTube video transcripts
@@ -27,9 +27,7 @@ export class TranscriptService {
   }: TranscriptParams): Promise<unknown> {
     try {
       this.initialize();
-      
-      // YoutubeTranscript.fetchTranscript only accepts videoId
-      const transcript = await YoutubeTranscript.fetchTranscript(videoId);
+      const transcript = await fetchYouTubeTranscript(videoId, { language });
       
       return {
         videoId,
@@ -51,8 +49,7 @@ export class TranscriptService {
   }: SearchTranscriptParams): Promise<unknown> {
     try {
       this.initialize();
-      
-      const transcript = await YoutubeTranscript.fetchTranscript(videoId);
+      const transcript = await fetchYouTubeTranscript(videoId, { language });
       
       // Search through transcript for the query
       const matches = transcript.filter(item => 
@@ -80,12 +77,11 @@ export class TranscriptService {
   }: TranscriptParams): Promise<unknown> {
     try {
       this.initialize();
-      
-      const transcript = await YoutubeTranscript.fetchTranscript(videoId);
+      const transcript = await fetchYouTubeTranscript(videoId, { language });
       
       // Format timestamps in human-readable format
       const timestampedTranscript = transcript.map(item => {
-        const seconds = item.offset / 1000;
+        const seconds = item.offset;
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = Math.floor(seconds % 60);
         const formattedTime = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
@@ -93,8 +89,8 @@ export class TranscriptService {
         return {
           timestamp: formattedTime,
           text: item.text,
-          startTimeMs: item.offset,
-          durationMs: item.duration
+          startTimeMs: Math.round(item.offset * 1000),
+          durationMs: Math.round(item.duration * 1000)
         };
       });
       
