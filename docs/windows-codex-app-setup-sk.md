@@ -4,6 +4,18 @@ Overene lokalne: `2026-05-17T17:15:00+02:00`
 
 Tento navod je prakticky postup pre Windows 11 pouzivatela Codex App, ktory chce pouzivat tento `youtube` MCP server. Zakladny read-only rezim potrebuje iba YouTube Data API key. OAuth nastavuj iba vtedy, ked realne chces write tooly pre playlisty.
 
+## Odporucany Codex App workflow
+
+Najmenej problemovy postup je robit to ako samostatny Codex projekt, nie v nahodnom globalnom chate.
+
+1. Vytvor stabilny lokalny priecinok pre Codex projekty, napriklad `C:\AIprojekty\Codex`.
+2. Do neho klonuj tento repozitar ako `youtube-mcp-enhanced`.
+3. V Codex App otvor tento priecinok ako samostatny projekt.
+4. V tom projekte zacni novy fresh thread.
+5. V prvom prompte povedz Codexu, aby najprv precital tento dokument a nic nemenil mimo tohto setupu.
+
+Ak ma pouzivatel najprv iba tento markdown subor, stale je to v poriadku: nech v novom Codex threade ukaze na dokument, necha Codex vytvorit/klonovat projektovy priecinok a az potom pokracuje podla krokov nizsie.
+
 ## Prompt pre bratov Codex
 
 Toto je najbezpecnejsi prompt, ktory moze pouzivatel dat svojmu Codexu:
@@ -11,12 +23,15 @@ Toto je najbezpecnejsi prompt, ktory moze pouzivatel dat svojmu Codexu:
 ```text
 Si Codex na Windows 11. Nastav mi lokalny YouTube MCP server podla dokumentu docs/windows-codex-app-setup-sk.md z repozitara youtube-mcp-enhanced.
 
-Najprv iba over lokalnu realitu:
+Pracuj v samostatnom Codex App projekte pre youtube-mcp-enhanced. Ak este neexistuje, vytvor/klonuj ho do stabilneho lokalneho priecinka pre Codex projekty. Nemiesaj tuto pracu s inym repozitarom alebo globalnym chatom.
+
+Najprv iba over lokalnu realitu a nic nemen:
 - git --version
 - node --version
 - npm --version
 - py -3 --version
 - existenciu %USERPROFILE%\.codex\config.toml
+- ci som v spravnom projektovom priecinku alebo kde ho mam vytvorit
 
 Potom:
 1. Klonuj alebo aktualizuj repo youtube-mcp-enhanced do stabilneho lokalneho adresara.
@@ -30,6 +45,8 @@ Potom:
 9. Po zmene configu mi povedz, ze treba restartovat Codex App.
 10. Po restarte over read-only smoke test na troch videach z dokumentu.
 ```
+
+Cold fresh Codex by si mal s tymto dokumentom poradit bez dalsieho kontextu. Ak sa zasekne, ma sa zastavit a vypisat presny blocker: chyba Git/Node/Python, chyba pristup k repozitaru, chyba API key, Google Console pyta billing, alebo po restarte Codex App nevidi `youtube` MCP tooly.
 
 ## Co tento server robi
 
