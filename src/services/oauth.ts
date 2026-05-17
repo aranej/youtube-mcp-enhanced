@@ -4,7 +4,12 @@ import * as url from 'url';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const TOKEN_PATH = path.join(process.env.APPDATA || process.env.HOME || '.', 'youtube-mcp-token.json');
+const TOKEN_BASE_DIR =
+  process.env.APPDATA ||
+  (process.env.USERPROFILE ? path.join(process.env.USERPROFILE, 'AppData', 'Roaming') : undefined) ||
+  process.env.HOME ||
+  '.';
+const TOKEN_PATH = path.join(TOKEN_BASE_DIR, 'youtube-mcp-token.json');
 
 const SCOPES = ['https://www.googleapis.com/auth/youtube'];
 
@@ -42,7 +47,7 @@ export class OAuthService {
           const { credentials } = await this.oauth2Client.refreshAccessToken();
           this.saveToken(credentials);
           this.oauth2Client.setCredentials(credentials);
-        } catch (error) {
+        } catch {
           // Token refresh failed, need to re-authenticate
           console.error('Token refresh failed, need to re-authenticate');
           return null;

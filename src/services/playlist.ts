@@ -258,7 +258,14 @@ export class PlaylistService {
         maxResults
       });
       
-      return response.data.items || [];
+      return (response.data.items || []).map((item) => {
+        const videoId = item.contentDetails?.videoId || item.snippet?.resourceId?.videoId || null;
+        return {
+          ...item,
+          url: videoId ? `https://www.youtube.com/watch?v=${videoId}` : null,
+          videoId,
+        };
+      });
     } catch (error) {
       throw new Error(`Failed to get playlist items: ${error instanceof Error ? error.message : String(error)}`);
     }

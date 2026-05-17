@@ -20,7 +20,7 @@ export class VideoService {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const v = videoData as any;
-    const videoId = v.id || v.id?.videoId;
+    const videoId = typeof v.id === 'string' ? v.id : v.id?.videoId;
     const url = videoId ? `https://www.youtube.com/watch?v=${videoId}` : null;
 
     return {

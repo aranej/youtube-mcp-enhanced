@@ -108,6 +108,15 @@ Set the following environment variables:
 * `YOUTUBE_API_KEY`: Your YouTube Data API key (required)
 * `YOUTUBE_TRANSCRIPT_LANG`: Default language for transcripts (optional, defaults to 'en')
 
+### Local transcript fallback
+
+This local Windows setup now uses a `yt-dlp` fallback for transcript extraction because YouTube's web transcript responses can fail unpredictably for Node-based scraping.
+
+Requirements for this fallback:
+
+* Python available on PATH
+* `yt-dlp` installed for that Python environment (`python -m pip install yt-dlp`)
+
 ## YouTube API Setup
 
 1. Go to Google Cloud Console

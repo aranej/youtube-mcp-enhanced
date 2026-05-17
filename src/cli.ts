@@ -11,10 +11,7 @@ if (!process.env.YOUTUBE_API_KEY) {
 
 // Start the MCP server
 startMcpServer()
-    .then(() => {
-        // Use stderr - stdout is reserved for JSON-RPC
-        console.error('YouTube MCP Server started successfully');
-    })
+    .then(() => undefined)
     .catch(error => {
         console.error('Failed to start YouTube MCP Server:', error);
         process.exit(1);

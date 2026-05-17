@@ -5,7 +5,7 @@ import { TranscriptService } from './services/transcript.js';
 import { PlaylistService } from './services/playlist.js';
 import { ChannelService } from './services/channel.js';
 
-const packageVersion = '0.1.12';
+const packageVersion = '1.0.0';
 
 /**
  * Creates and configures a YouTube MCP server with all tools, resources, and prompts registered
@@ -400,8 +400,8 @@ export function createYouTubeMcpServer() {
         async () => {
             try {
                 const authUrl = playlistService.getAuthUrl();
-                // Start auth flow in background
-                const authPromise = playlistService.startAuthFlow();
+                // Start auth flow in background.
+                void playlistService.startAuthFlow();
                 
                 return {
                     content: [{
