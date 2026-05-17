@@ -58,6 +58,9 @@ A Model Context Protocol (MCP) server implementation for YouTube, enabling AI la
 
 ### Local Installation (Recommended)
 
+For a Windows 11 + Codex App setup guide, see
+[`docs/windows-codex-app-setup-sk.md`](docs/windows-codex-app-setup-sk.md).
+
 1. Clone this repository:
 
 ```bash
