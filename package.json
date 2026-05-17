@@ -56,7 +56,7 @@
     "claude",
     "anthropic"
   ],
-  "author": "Jozef Araneda (based on work by Stefano Fiorini)",
+  "author": "youtube-mcp-enhanced maintainers (based on work by Stefano Fiorini)",
   "license": "MIT",
   "repository": {
     "type": "git",

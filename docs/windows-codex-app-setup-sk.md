@@ -101,9 +101,9 @@ py -3 -m yt_dlp --version
 
 ## Google Cloud Console navigacia
 
-Lokalne overena trasa na Jozefovom ucte `slofo22@gmail.com`:
+Lokalne overena trasa na overenom Windows prostredi:
 
-- project selector hore: vybraty projekt `n8n-VPS-CX32`,
+- project selector hore: vybraty Google Cloud projekt,
 - lave menu: `APIs & Services`,
 - podmenu: `Enabled APIs & services`, `Library`, `Credentials`, `OAuth consent screen`,
 - detail API: `YouTube Data API v3`,
@@ -141,7 +141,7 @@ Postup:
 5. V detaile API key nastav `API restrictions` na `YouTube Data API v3`.
 6. API key si uloz mimo repozitara. Necommituj ho.
 
-Podla oficialnej Google dokumentacie maju projekty so zapnutym YouTube Data API default quota allocation `10,000 units per day`. Lokalny Jozefov projekt ukazuje `Queries per day = 10,000` a API funguje bez priradeneho Cloud billing account. Toto je quota model, nie ciel minat peniaze. Ak sa objavi platobny alebo billing krok, nepokracuj.
+Podla oficialnej Google dokumentacie maju projekty so zapnutym YouTube Data API default quota allocation `10,000 units per day`. Lokalny overeny projekt ukazuje `Queries per day = 10,000` a API funguje bez priradeneho Cloud billing account. Toto je quota model, nie ciel minat peniaze. Ak sa objavi platobny alebo billing krok, nepokracuj.
 
 ## Volitelny OAuth pre playlist write tooly
 
