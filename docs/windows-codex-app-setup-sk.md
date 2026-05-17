@@ -24,9 +24,10 @@ Potom:
 3. Priprav Codex MCP config blok pre [mcp_servers.youtube].
 4. Nepostuj moje realne API/OAuth secrets do chatu a necommituj ich.
 5. Ak API key nemas, zastav sa a povedz mi presne, co mam vytvorit v Google Cloud Console.
-6. OAuth nastav iba ak ta o to vyslovene poziadam; default je read-only.
-7. Po zmene configu mi povedz, ze treba restartovat Codex App.
-8. Po restarte over read-only smoke test na troch videach z dokumentu.
+6. Ak Google Console pyta billing, platobnu kartu, Free trial, upgrade alebo navysenie kvoty, zastav sa. Nechcem nic platene.
+7. OAuth nastav iba ak ta o to vyslovene poziadam; default je read-only.
+8. Po zmene configu mi povedz, ze treba restartovat Codex App.
+9. Po restarte over read-only smoke test na troch videach z dokumentu.
 ```
 
 ## Co tento server robi
@@ -76,6 +77,29 @@ py -3 -m pip install --user -U yt-dlp
 py -3 -m yt_dlp --version
 ```
 
+## Google Cloud Console navigacia
+
+Lokalne overena trasa na Jozefovom ucte `slofo22@gmail.com`:
+
+- project selector hore: vybraty projekt `n8n-VPS-CX32`,
+- lave menu: `APIs & Services`,
+- podmenu: `Enabled APIs & services`, `Library`, `Credentials`, `OAuth consent screen`,
+- detail API: `YouTube Data API v3`,
+- stav na detaile: `API Enabled`, tlacidlo `Manage`,
+- `Manage` detail ma taby `Metrics`, `Quotas & System Limits`, `Credentials`.
+
+Pre bratov projekt pouzi rovnake menu, len iny project selector:
+
+1. Otvor `https://console.cloud.google.com/`.
+2. Hore vyber spravny Google ucet a projekt.
+3. Otvor `APIs & Services` -> `Library`.
+4. Vyhladaj `YouTube Data API v3`.
+5. Ak vidis `Enable`, zapni API. Ak vidis `API Enabled` alebo `Manage`, API uz je zapnute.
+6. Otvor `Manage` -> `Quotas & System Limits` a skontroluj `Queries per day`.
+7. Otvor `Credentials` pre API key.
+
+Hard stop: neklikaj `Free trial`, `Billing`, `Raise daily token limit`, `Request quota increase`, upgrade ani nic s platobnou kartou. Ak Google Console pyta billing alebo platobnu kartu, zastav setup a najprv to prekonzultuj.
+
 ## Google API key
 
 Podla oficialnej Google dokumentacie aplikacie pouzivajuce YouTube Data API potrebuju authorization credentials. Pre verejne/read-only poziadavky staci API key; OAuth je na privatne user data a write operacie.
@@ -85,10 +109,11 @@ Postup:
 1. Otvor Google Cloud Console.
 2. Vytvor alebo vyber projekt.
 3. Zapni `YouTube Data API v3`.
-4. V `APIs & Services` -> `Credentials` vytvor `API key`.
-5. API key si uloz mimo repozitara. Necommituj ho.
+4. V `APIs & Services` -> `Credentials` pouzi `Create credentials` -> `API key`.
+5. V detaile API key nastav `API restrictions` na `YouTube Data API v3`.
+6. API key si uloz mimo repozitara. Necommituj ho.
 
-Pre produkcne alebo zdielane pouzitie key obmedz na YouTube Data API v3. Pre osobny lokalny test je dolezite najprv overit funkcnost, potom sprisnovat restrikcie.
+Podla oficialnej Google dokumentacie maju projekty so zapnutym YouTube Data API default quota allocation `10,000 units per day`. Lokalny Jozefov projekt ukazuje `Queries per day = 10,000` a API funguje bez priradeneho Cloud billing account. Toto je quota model, nie ciel minat peniaze. Ak sa objavi platobny alebo billing krok, nepokracuj.
 
 ## Volitelny OAuth pre playlist write tooly
 
@@ -102,18 +127,20 @@ Tento server pouziva:
 
 Postup:
 
-1. V tom istom Google Cloud projekte nastav OAuth consent screen.
-2. Vytvor `OAuth 2.0 Client ID`.
-3. Pouzi typ `Web application`.
-4. Do `Authorized redirect URIs` pridaj:
+1. V tom istom Google Cloud projekte otvor `Google Auth Platform` alebo `APIs & Services` -> `OAuth consent screen`.
+2. Skontroluj alebo nastav zakladne branding/audience udaje.
+3. Otvor `Google Auth Platform` -> `Clients`.
+4. Vytvor `OAuth 2.0 Client ID`.
+5. Pouzi typ `Desktop app`.
+6. Uloz `Client ID` a `Client secret`.
+
+Tento lokalny MCP server pocuva callback:
 
 ```text
 http://localhost:8888/callback
 ```
 
-5. Uloz `Client ID` a `Client secret`.
-
-Podla oficialnej Google OAuth dokumentacie musi redirect URI sediet s tym, co aplikacia posiela, a `localhost` URI su vynimka z HTTPS poziadavky. YouTube Data API nepouziva service account flow pre user YouTube ucet, preto tu nepouzivaj service account.
+Podla oficialnej Google OAuth dokumentacie je pre lokalne desktop apps urceny OAuth flow pre iOS/Desktop apps a loopback redirect cez `localhost`/`127.0.0.1` zostava podporovany pre desktop app klientov. YouTube Data API nepouziva service account flow pre user YouTube ucet, preto tu nepouzivaj service account.
 
 ## Codex App config
 
@@ -255,4 +282,6 @@ OAuth/write nefunguje:
 - OpenAI Codex config reference: https://developers.openai.com/codex/config-reference#configtoml
 - Google YouTube Data API credentials: https://developers.google.com/youtube/registering_an_application
 - Google YouTube Data API OAuth guide: https://developers.google.com/youtube/v3/guides/authentication
+- Google YouTube Data API quota: https://developers.google.com/youtube/v3/getting-started#quota
+- Google OAuth for desktop apps: https://developers.google.com/identity/protocols/oauth2/native-app
 - Google OAuth redirect URI rules: https://developers.google.com/identity/protocols/oauth2/web-server
