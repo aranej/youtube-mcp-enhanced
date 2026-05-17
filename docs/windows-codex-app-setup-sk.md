@@ -20,7 +20,7 @@ Najprv iba over lokalnu realitu:
 
 Potom:
 1. Klonuj alebo aktualizuj repo youtube-mcp-enhanced do stabilneho lokalneho adresara.
-2. Spusti npm install, npm run build a py -3 -m pip install --user -U yt-dlp.
+2. Spusti npm ci, npm run build a py -3 -m pip install --user -U yt-dlp.
 3. Priprav Codex MCP config blok pre [mcp_servers.youtube].
 4. Nepostuj moje realne API/OAuth secrets do chatu a necommituj ich.
 5. Ak API key nemas, zastav sa a povedz mi presne, co mam vytvorit v Google Cloud Console.
@@ -65,7 +65,7 @@ New-Item -ItemType Directory -Force C:\AIprojekty\Codex | Out-Null
 Set-Location C:\AIprojekty\Codex
 git clone https://github.com/aranej/youtube-mcp-enhanced.git
 Set-Location C:\AIprojekty\Codex\youtube-mcp-enhanced
-npm install
+npm ci
 npm run build
 ```
 
