@@ -23,11 +23,12 @@ Potom:
 2. Spusti npm ci, npm run build a py -3 -m pip install --user -U yt-dlp.
 3. Priprav Codex MCP config blok pre [mcp_servers.youtube].
 4. Nepostuj moje realne API/OAuth secrets do chatu a necommituj ich.
-5. Ak API key nemas, zastav sa a povedz mi presne, co mam vytvorit v Google Cloud Console.
-6. Ak Google Console pyta billing, platobnu kartu, Free trial, upgrade alebo navysenie kvoty, zastav sa. Nechcem nic platene.
-7. OAuth nastav iba ak ta o to vyslovene poziadam; default je read-only.
-8. Po zmene configu mi povedz, ze treba restartovat Codex App.
-9. Po restarte over read-only smoke test na troch videach z dokumentu.
+5. Ak API key nemas, nastav iba free Google Cloud/API Console cast: projekt, YouTube Data API v3, API key.
+6. Google Cloud projekt je potrebny. Cloud Billing account nie je ciel a nechcem ho.
+7. Ak Google Console pyta billing, platobnu kartu, Free trial, upgrade alebo navysenie kvoty, zastav sa. Nechcem nic platene.
+8. OAuth nastav iba ak ta o to vyslovene poziadam; default je read-only.
+9. Po zmene configu mi povedz, ze treba restartovat Codex App.
+10. Po restarte over read-only smoke test na troch videach z dokumentu.
 ```
 
 ## Co tento server robi
@@ -47,6 +48,27 @@ Potom:
 - Python launcher `py`,
 - Google ucet,
 - pristup ku GitHub repozitaru `https://github.com/aranej/youtube-mcp-enhanced`.
+
+## Bezpodmienecne free pravidlo
+
+Ciel je `0 EUR`.
+
+Pre YouTube Data API setup potrebujes:
+
+- Google ucet,
+- Google Cloud/API Console projekt,
+- zapnuty `YouTube Data API v3`,
+- API key obmedzeny na `YouTube Data API v3`.
+
+Nepotrebujes a nemas vytvarat:
+
+- Cloud Billing account,
+- platobnu kartu,
+- Free trial,
+- plateny Google Cloud resource,
+- quota increase alebo raise limit request.
+
+Ak Google Console pyta billing, kartu, free trial, upgrade, marketplace nakup, trial aktivaciu alebo navysenie kvoty, zastav sa. V tomto navode je to stop condition, nie krok instalacie.
 
 Overenie:
 
@@ -88,15 +110,21 @@ Lokalne overena trasa na Jozefovom ucte `slofo22@gmail.com`:
 - stav na detaile: `API Enabled`, tlacidlo `Manage`,
 - `Manage` detail ma taby `Metrics`, `Quotas & System Limits`, `Credentials`.
 
-Pre bratov projekt pouzi rovnake menu, len iny project selector:
+Podla oficialnej Google dokumentacie je projekt potrebny: YouTube Data API vyzaduje Google ucet, projekt v Google Developers Console a zapnuty YouTube Data API v3. Projekt je miesto, kde sa zapne API, vytvori API key a sleduje quota usage.
+
+Pre bratov projekt pouzi rovnake menu, len jeho Google ucet a jeho project selector:
 
 1. Otvor `https://console.cloud.google.com/`.
-2. Hore vyber spravny Google ucet a projekt.
-3. Otvor `APIs & Services` -> `Library`.
-4. Vyhladaj `YouTube Data API v3`.
-5. Ak vidis `Enable`, zapni API. Ak vidis `API Enabled` alebo `Manage`, API uz je zapnute.
-6. Otvor `Manage` -> `Quotas & System Limits` a skontroluj `Queries per day`.
-7. Otvor `Credentials` pre API key.
+2. Hore vyber spravny Google ucet.
+3. Otvor project selector.
+4. Ak uz ma vhodny projekt, vyber ho.
+5. Ak nema vhodny projekt, vytvor novy projekt, napr. `youtube-mcp-free`.
+6. Pri vytvarani projektu nevyberaj ani nevytvaraj Cloud Billing account. Ak je billing povinny alebo sa neda preskocit, zastav setup.
+7. V projekte otvor `APIs & Services` -> `Library`.
+8. Vyhladaj `YouTube Data API v3`.
+9. Ak vidis `Enable`, zapni API. Ak vidis `API Enabled` alebo `Manage`, API uz je zapnute.
+10. Otvor `Manage` -> `Quotas & System Limits` a skontroluj `Queries per day`.
+11. Otvor `Credentials` pre API key.
 
 Hard stop: neklikaj `Free trial`, `Billing`, `Raise daily token limit`, `Request quota increase`, upgrade ani nic s platobnou kartou. Ak Google Console pyta billing alebo platobnu kartu, zastav setup a najprv to prekonzultuj.
 
@@ -107,7 +135,7 @@ Podla oficialnej Google dokumentacie aplikacie pouzivajuce YouTube Data API potr
 Postup:
 
 1. Otvor Google Cloud Console.
-2. Vytvor alebo vyber projekt.
+2. Vyber existujuci free projekt alebo vytvor novy projekt bez billing account.
 3. Zapni `YouTube Data API v3`.
 4. V `APIs & Services` -> `Credentials` pouzi `Create credentials` -> `API key`.
 5. V detaile API key nastav `API restrictions` na `YouTube Data API v3`.
@@ -282,6 +310,6 @@ OAuth/write nefunguje:
 - OpenAI Codex config reference: https://developers.openai.com/codex/config-reference#configtoml
 - Google YouTube Data API credentials: https://developers.google.com/youtube/registering_an_application
 - Google YouTube Data API OAuth guide: https://developers.google.com/youtube/v3/guides/authentication
-- Google YouTube Data API quota: https://developers.google.com/youtube/v3/getting-started#quota
+- Google YouTube Data API overview/project/quota: https://developers.google.com/youtube/v3/getting-started
 - Google OAuth for desktop apps: https://developers.google.com/identity/protocols/oauth2/native-app
 - Google OAuth redirect URI rules: https://developers.google.com/identity/protocols/oauth2/web-server
